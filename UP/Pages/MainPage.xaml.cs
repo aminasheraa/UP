@@ -23,6 +23,55 @@ namespace UP.Pages
         public MainPage()
         {
             InitializeComponent();
+            LoadData();
+
+        }
+        private void LoadData()
+        {
+            if (Core.CurrentUser != null && Core.CurrentUser.Role != null && Core.CurrentUser.Role.Name == "Автор")
+            {
+                AccountButton.Visibility = Visibility.Collapsed;
+                AuthorButton.Visibility = Visibility.Visible;
+
+            }
+            else if (Core.CurrentUser != null && Core.CurrentUser.Role != null && Core.CurrentUser.Role.Name == "Администратор")
+            {
+                AccountButton.Visibility = Visibility.Collapsed;
+                AdminButton.Visibility = Visibility.Visible;
+            }
+        }
+        private void BookCatalogButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainPageFrame.Navigate(new BookCatalog());
+        }
+        private void AccountButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Core.CurrentUser == null)
+            {
+                MainPageFrame.Navigate(new AuthPage());
+            }
+            else
+            {
+                MainPageFrame.Navigate(new AccountPage());
+            }
+        }
+        private void FreezeButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+        private void ReadingListButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+        private void LogOutButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void AdminButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void AuthorButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

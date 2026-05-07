@@ -16,16 +16,22 @@ using System.Windows.Shapes;
 namespace UP.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для BookCatalog.xaml
+    /// Логика взаимодействия для AccountPage.xaml
     /// </summary>
-    public partial class BookCatalog : Page
+    public partial class AccountPage : Page
     {
-        public BookCatalog()
+        public AccountPage()
         {
             InitializeComponent();
-            BookListBox.ItemsSource = Core.Context.Book.Include("User").Include("Review").ToList();
-
+            LoadData();
         }
 
+        private void LoadData()
+        {
+            var user = Core.CurrentUser;
+            if (user == null)
+                return;
+            ReviewListBox.ItemsSource = Core.Context.Review.Where(r => r.UserID == user.ID).ToList();
+        }
     }
 }

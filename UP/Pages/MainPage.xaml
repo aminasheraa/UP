@@ -9,6 +9,40 @@
       Title="MainPage" Background="White">
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" x:Name="NameTextBlock" Text="Читай, Пиши и не спиши" FontFamily="Book Antiqua" FontWeight="Bold" FontSize="25" VerticalAlignment="Center" Margin="20"/>
+
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Button x:Name="AccountButton" Click="AccountButton_Click" Width="60" Height="60" Margin="10" Background="White" BorderThickness="0" ToolTip="Профиль">
+                <Image Source="/Images/profile.png"  Width="50" Height="50"/>
+            </Button>
+            <Button x:Name="BookCatalogButton" Click="BookCatalogButton_Click" Width="60" Height="60" Margin="10" Background="White" BorderThickness="0" ToolTip="Каталог книг">
+                <Image Source="/Images/bookcatalog.png"  Width="50" Height="50" />
+            </Button>
+            <Button x:Name="ReadingListButton" Click="ReadingListButton_Click" Width="70" Height="70" Margin="10" Background="White" BorderThickness="0" ToolTip="Списки книг">
+                <Image Source="/Images/readinglist.png"  Width="60" Height="60" />
+            </Button>
+            <Button x:Name="AdminButton" Click="AdminButton_Click" Width="60" Height="60" Margin="10" Background="White" BorderThickness="0" ToolTip="Администрирование" Visibility="Collapsed">
+                <Image Source="/Images/admin.png"  Width="50" Height="50" />
+            </Button>
+            <Button x:Name="AuthorButton" Click="AuthorButton_Click" Width="60" Height="60" Margin="10" Background="White" BorderThickness="0" ToolTip="Автор" Visibility="Collapsed">
+                <Image Source="/Images/author.png"  Width="50" Height="50" />
+            </Button>
+            <Button x:Name="FreezeButton" Click="FreezeButton_Click" Width="60" Height="60" Margin="10" Background="White" BorderThickness="0" ToolTip="Заморозка" Visibility="Collapsed">
+                <Image Source="/Images/freeze.png"  Width="50" Height="50" />
+            </Button>
+
+        </StackPanel>
+        <Frame x:Name="MainPageFrame" Source="/Pages/BookCatalogPage.xaml" Grid.Column="1" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+       
     </Grid>
 </Page>

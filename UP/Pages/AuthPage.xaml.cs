@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace UP.Pages
+{
+    /// <summary>
+    /// Логика взаимодействия для AuthPage.xaml
+    /// </summary>
+    public partial class AuthPage : Page
+    {
+        public AuthPage()
+        {
+            InitializeComponent();
+        }
+
+        private void LogInButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            string login = LoginTB.Text;
+            string password = PasswordTB.Text;
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+            {
+                MessageBox.Show("Введите логин и пароль");
+                return;
+            }
+            var user = Core.Context.User.FirstOrDefault(u => u.Login == login && u.Password == password);
+
+            if (user == null)
+            {
+                MessageBox.Show("Неверный логин или пароль");
+                return;
+            }
+
+            if (user.IsFrozen == true)
+            {
+                MessageBox.Show("Ваш аккаунт заблокирован");
+                return;
+            }
+
+            if (user.Role == null)
+            {
+                MessageBox.Show("Нет роли");
+                return;
+            }
+
+            Core.CurrentUser = user;
+
+            if (user.Role.Name == "Автор")
+                NavigationService.Navigate(new AuthorPage());
+            else if (user.Role.Name == "Администратор")
+                NavigationService.Navigate(new AdminPage());
+            else
+                NavigationService.Navigate(new MainPage());
+
+
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new RegPage());
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new MainPage());
+        }
+    }
+}
