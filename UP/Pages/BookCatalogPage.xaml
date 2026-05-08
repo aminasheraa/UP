@@ -9,7 +9,32 @@
       Title="BookCatalog" Background="White">
 
     <Grid>
-        <ListBox Grid.Row="1" Grid.Column="1" x:Name="BookListBox" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="15" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <TextBox x:Name="SearchTB" FontFamily="Book Antiqua" Width="150" Margin="5" TextChanged="SearchTB_TextChanged"/>
+
+            <ComboBox x:Name="NameAndRatingCB" FontFamily="Book Antiqua" Width="150" Margin="5">
+                <ComboBoxItem Content="В алфавитном порядке" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Не в алфавитном порядке" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Рейтинг ↑" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Рейтинг ↓" FontFamily="Book Antiqua"/>
+            </ComboBox>                
+            <ComboBox x:Name="SortGenreCB" FontFamily="Book Antiqua" Width="150" Margin="5">
+                <ComboBoxItem Content="Антиутопия" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Классика" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Роман" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Романтика" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Современная проза" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Хоррор" FontFamily="Book Antiqua"/>
+            </ComboBox>
+
+            <Button Content="Применить" Width="90"  Margin="5" Click="ApplyFilter_Click" FontFamily="Book Antiqua"/>
+            <Button Content="✕" Width="30" Margin="5" Click="ResetFilter_Click" FontFamily="Book Antiqua"/>
+        </StackPanel>
+        <ListBox Grid.Row="1" Grid.Column="1" x:Name="BookListBox" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="15" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}" MouseDoubleClick="BookListBox_MouseDoubleClick">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Width="220">

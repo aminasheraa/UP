@@ -46,7 +46,7 @@ namespace UP.Pages
 
             if (user.IsFrozen == true)
             {
-                MessageBox.Show("Ваш аккаунт заблокирован");
+                MessageBox.Show("Ваш аккаунт заморожен");
                 return;
             }
 
@@ -63,7 +63,7 @@ namespace UP.Pages
             else if (user.Role.Name == "Администратор")
                 NavigationService.Navigate(new AdminPage());
             else
-                NavigationService.Navigate(new MainPage());
+                NavigationService.Navigate(new BookCatalog());
 
 
 
@@ -76,7 +76,7 @@ namespace UP.Pages
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new MainPage());
+            NavigationService.Navigate(new BookCatalog());
         }
     }
 }
