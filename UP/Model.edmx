@@ -63,6 +63,7 @@
           <Property Name="BookID" Type="int" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="IsFrozen" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -455,6 +456,7 @@
           <NavigationProperty Name="Book" Relationship="Self.FK_Review_Book" FromRole="Review" ToRole="Book" />
           <NavigationProperty Name="Complaint" Relationship="Self.FK_Complaint_Review" FromRole="Review" ToRole="Complaint" />
           <NavigationProperty Name="User" Relationship="Self.FK_Review_User" FromRole="Review" ToRole="User" />
+          <Property Name="IsFrozen" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -841,6 +843,7 @@
           <EntitySetMapping Name="Review">
             <EntityTypeMapping TypeName="UPModel.Review">
               <MappingFragment StoreEntitySet="Review">
+                <ScalarProperty Name="IsFrozen" ColumnName="IsFrozen" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="Text" ColumnName="Text" />

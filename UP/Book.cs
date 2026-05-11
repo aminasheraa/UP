@@ -11,7 +11,6 @@ namespace UP
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     
     public partial class Book
     {
@@ -24,8 +23,7 @@ namespace UP
             this.Review = new HashSet<Review>();
             this.UnfreezeApplication = new HashSet<UnfreezeApplication>();
         }
-
-
+    
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -33,7 +31,7 @@ namespace UP
         public string Text { get; set; }
         public int AuthorID { get; set; }
         public bool IsFrozen { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Complaint> Complaint { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -45,7 +43,5 @@ namespace UP
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UnfreezeApplication> UnfreezeApplication { get; set; }
         public virtual User User { get; set; }
-
-
     }
 }

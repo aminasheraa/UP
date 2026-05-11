@@ -61,10 +61,6 @@ namespace UP.Pages
         private void ReadingListButton_Click(object sender, RoutedEventArgs e)
         {
         }
-        private void LogOutButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
 

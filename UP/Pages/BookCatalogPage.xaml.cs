@@ -29,7 +29,7 @@ namespace UP.Pages
         }
         private void LoadBooks()
         {
-             BookListBox.ItemsSource = Core.Context.Book.Include("User").Include("Review").ToList();
+             BookListBox.ItemsSource = Core.Context.Book.Include("User").Include("Review").Where(b => b.IsFrozen == false).ToList();
 
         }
 
@@ -43,14 +43,15 @@ namespace UP.Pages
                 return;
             }
 
-            var searchedBook = Core.Context.Book.Where(f => f.Name.ToLower().Contains(search) || f.User.Name.ToLower().Contains(search)).ToList();
+            var searchedBook = Core.Context.Book.Where(b => b.IsFrozen == false).Where(f => f.Name.ToLower().Contains(search) || f.User.Name.ToLower().Contains(search)).ToList();
+
             BookListBox.ItemsSource = searchedBook;
         }
 
         private void ApplyFilter_Click(object sender, RoutedEventArgs e)
         {
 
-            var filtered = Core.Context.Book.ToList();
+            var filtered = Core.Context.Book.Where(b => b.IsFrozen == false).ToList();
 
             if (SortGenreCB.SelectedItem != null)
             {
@@ -87,7 +88,10 @@ namespace UP.Pages
 
         private void BookListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (BookListBox.SelectedItem is Book selectedBook)
+            {
+                NavigationService.Navigate(new BookPage(selectedBook));
+            }
         }
 
 
