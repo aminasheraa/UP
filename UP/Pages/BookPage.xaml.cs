@@ -121,8 +121,7 @@ namespace UP.Pages
         {
             if (!IsUserNotNull()) return;
 
-            MessageBox.Show($"Открываем книгу: {_currentBook.Name}");
-            // NavigationService.Navigate(new ReadPage(_currentBook));
+            NavigationService.Navigate(new ReadPage(_currentBook));
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
