@@ -54,12 +54,7 @@ namespace UP.Pages
 
             Core.CurrentUser = user;
 
-            if (user.Role.Name == "Автор")
-                NavigationService.Navigate(new AuthorPage());
-            else if (user.Role.Name == "Администратор")
-                NavigationService.Navigate(new AdminPage());
-            else
-                NavigationService.Navigate(new BookCatalog());
+            NavigationService.GoBack();
 
 
 

@@ -85,6 +85,9 @@
     <Compile Include="Pages\AccountPage.xaml.cs">
       <DependentUpon>AccountPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\AddEditBookPage.xaml.cs">
+      <DependentUpon>AddEditBookPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ReadPage.xaml.cs">
       <DependentUpon>ReadPage.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,9 @@
     </Compile>
     <Page Include="Pages\AccountPage.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\AddEditBookPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\AdminPage.xaml">

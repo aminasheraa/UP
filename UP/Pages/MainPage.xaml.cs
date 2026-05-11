@@ -23,21 +23,26 @@ namespace UP.Pages
         public MainPage()
         {
             InitializeComponent();
-            LoadData();
-
+            MainPageFrame.Navigated += (s, e) => LoadData();
         }
+
         private void LoadData()
         {
-            if (Core.CurrentUser != null && Core.CurrentUser.Role != null && Core.CurrentUser.Role.Name == "Автор")
-            {
-                AccountButton.Visibility = Visibility.Collapsed;
-                AuthorButton.Visibility = Visibility.Visible;
+            AccountButton.Visibility = Visibility.Visible;
+            AuthorButton.Visibility = Visibility.Collapsed;
+            AdminButton.Visibility = Visibility.Collapsed;
 
-            }
-            else if (Core.CurrentUser != null && Core.CurrentUser.Role != null && Core.CurrentUser.Role.Name == "Администратор")
+            if (Core.CurrentUser != null)
             {
-                AccountButton.Visibility = Visibility.Collapsed;
-                AdminButton.Visibility = Visibility.Visible;
+                if (Core.CurrentUser.RoleID == 2)
+                {
+                    AuthorButton.Visibility = Visibility.Visible;
+                }
+                else if (Core.CurrentUser.RoleID == 3)
+                {
+                    AccountButton.Visibility = Visibility.Collapsed;
+                    AdminButton.Visibility = Visibility.Visible;
+                }
             }
         }
         private void BookCatalogButton_Click(object sender, RoutedEventArgs e)
@@ -77,7 +82,7 @@ namespace UP.Pages
         }
         private void AuthorButton_Click(object sender, RoutedEventArgs e)
         {
-
+            MainPageFrame.Navigate(new AuthorPage());
         }
     }
 }
