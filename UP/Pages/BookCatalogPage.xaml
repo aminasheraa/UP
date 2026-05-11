@@ -35,15 +35,15 @@
             <Button Content="✕" Width="30" Margin="5" Click="ResetFilter_Click" FontFamily="Book Antiqua"/>
         </StackPanel>
 
-        <ListBox Grid.Row="1" Grid.Column="1" x:Name="BookListBox" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="15" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}" MouseDoubleClick="BookListBox_MouseDoubleClick">
+        <ListBox Grid.Row="1" Grid.Column="1" x:Name="BookListBox" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}" MouseDoubleClick="BookListBox_MouseDoubleClick">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Width="220">
-                        <Image Margin="5" Source="{Binding ImagePath}" Height="330"  Stretch="UniformToFill"/>
-                        <TextBlock Text="{Binding Name}" TextWrapping="Wrap" FontSize="16" FontWeight="Bold" FontFamily="Book Antiqua"  Margin="5"/>
-                        <TextBlock Text="{Binding User.Name, StringFormat=Автор: {0}}" FontSize="14" Margin="5" FontFamily="Book Antiqua"/>
-                        <TextBlock Text="{Binding AverageRating, StringFormat=Рейтинг: {0}}" FontSize="14" Margin="5" FontFamily="Book Antiqua"/>
-                        <TextBlock Text="{Binding GenresText}" FontSize="14" Margin="5" FontFamily="Book Antiqua" TextWrapping="Wrap"/>
+                    <StackPanel Width="160">
+                        <Image Margin="5" Source="{Binding ImagePath}" Height="240"  Stretch="UniformToFill"/>
+                        <TextBlock Text="{Binding Name}" TextWrapping="Wrap" FontSize="14" FontWeight="Bold" FontFamily="Book Antiqua"  Margin="5"/>
+                        <TextBlock Text="{Binding User.Name, StringFormat=Автор: {0}}" FontSize="12" Margin="5, 0" FontFamily="Book Antiqua"/>
+                        <TextBlock Text="{Binding AverageRating, StringFormat=Рейтинг: {0}}" FontSize="12" Margin="5,0" FontFamily="Book Antiqua"/>
+                        <TextBlock Text="{Binding GenresText}" FontSize="12" Margin="5" FontFamily="Book Antiqua" TextWrapping="Wrap"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

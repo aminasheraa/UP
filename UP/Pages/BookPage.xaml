@@ -16,7 +16,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                <Image Height="250" Stretch="UniformToFill" Source="{Binding ImagePath}"/>
+                <Image Height="280" Stretch="UniformToFill" Source="{Binding ImagePath}"/>
                 <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" FontFamily="Book Antiqua" TextWrapping="Wrap" Margin="0,8,0,4"/>
                 <TextBlock Text="{Binding User.Name, StringFormat=Автор: {0}}" FontSize="13" FontFamily="Book Antiqua" Margin="0,1"/>
                 <TextBlock Text="{Binding GenresText, StringFormat=Жанры: {0}}" FontSize="13" FontFamily="Book Antiqua" TextWrapping="Wrap" Margin="0,1"/>
@@ -25,10 +25,10 @@
                 <Button Content="В список" FontFamily="Book Antiqua" Height="25" Margin="0,2" FontSize="12">
                     <Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="В планах" Click="MenuItem_Click" Tag="1"/>
-                            <MenuItem Header="Читаю" Click="MenuItem_Click" Tag="2"/>
-                            <MenuItem Header="Прочитано" Click="MenuItem_Click" Tag="3"/>
-                            <MenuItem Header="Заброшено" Click="MenuItem_Click" Tag="4"/>
+                            <MenuItem Header="В планах" Click="MenuItem_Click" Tag="2"/>
+                            <MenuItem Header="Читаю" Click="MenuItem_Click" Tag="3"/>
+                            <MenuItem Header="Прочитано" Click="MenuItem_Click" Tag="4"/>
+                            <MenuItem Header="Заброшено" Click="MenuItem_Click" Tag="1"/>
                         </ContextMenu>
                     </Button.ContextMenu>
                     <Button.Style>

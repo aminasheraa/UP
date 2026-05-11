@@ -8,7 +8,68 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ReadingListPage" Background="White">
 
-    <Grid>
-        
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox x:Name="SearchTB" FontFamily="Book Antiqua" Width="150" Height="30" Margin="5" TextChanged="SearchTB_TextChanged"/>
+
+            <ComboBox x:Name="NameAndRatingCB" FontFamily="Book Antiqua" Width="150" Margin="5">
+                <ComboBoxItem Content="В алфавитном порядке" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Не в алфавитном порядке" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Рейтинг ↑" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Рейтинг ↓" FontFamily="Book Antiqua"/>
+            </ComboBox>
+            <ComboBox x:Name="SortGenreCB" FontFamily="Book Antiqua" Width="150" Margin="5">
+                <ComboBoxItem Content="Антиутопия" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Классика" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Роман" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Романтика" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Современная проза" FontFamily="Book Antiqua"/>
+                <ComboBoxItem Content="Хоррор" FontFamily="Book Antiqua"/>
+            </ComboBox>
+
+            <Button Content="Применить" Width="90"  Margin="5" Click="ApplyFilter_Click" FontFamily="Book Antiqua"/>
+            <Button Content="✕" Width="30" Margin="5" Click="ResetFilter_Click" FontFamily="Book Antiqua"/>
+        </StackPanel>
+
+        <TabControl Grid.Row="1" x:Name="SectionTabControl" SelectionChanged="SectionChanged">
+            <TabItem Header="В планах" Tag="2" FontFamily="Book Antiqua"/>
+            <TabItem Header="Читаю" Tag="3" FontFamily="Book Antiqua"/>
+            <TabItem Header="Прочитано" Tag="4" FontFamily="Book Antiqua"/>
+            <TabItem Header="Заброшено" Tag="1" FontFamily="Book Antiqua"/>
+        </TabControl>
+
+        <ListBox Grid.Row="2" x:Name="ReadingListBox" MouseDoubleClick="ReadingListBox_MouseDoubleClick" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Width="150" Margin="10">
+                        <Image Source="{Binding Book.ImagePath}" Height="240" Stretch="UniformToFill"/>
+                        <TextBlock Text="{Binding Book.Name}" FontSize="14" FontWeight="Bold" TextAlignment="Center" FontFamily="Book Antiqua" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Book.User.Name}" FontSize="12" TextAlignment="Center" FontFamily="Book Antiqua"/>
+
+                        <Button Content="Переместить" FontFamily="Book Antiqua" FontSize="10" Margin="0,5,0,5" Click="BtnMove_Click">
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="В планах" Click="MenuItem_Click" Tag="2"/>
+                                    <MenuItem Header="Читаю" Click="MenuItem_Click" Tag="3"/>
+                                    <MenuItem Header="Прочитано" Click="MenuItem_Click" Tag="4"/>
+                                    <MenuItem Header="Заброшено" Click="MenuItem_Click" Tag="1"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
     </Grid>
 </Page>

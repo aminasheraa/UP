@@ -74,7 +74,10 @@ namespace UP.Pages
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new BookCatalog());
+            if (NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
+            }
         }
 
         private void BtnSendReview_Click(object sender, RoutedEventArgs e)
@@ -259,9 +262,6 @@ namespace UP.Pages
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
     }
 }

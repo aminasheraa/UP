@@ -60,6 +60,16 @@ namespace UP.Pages
         }
         private void ReadingListButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Core.CurrentUser != null)
+            {
+                MainPageFrame.Navigate(new ReadingListPage());
+            }
+            else
+            {
+                MessageBox.Show("Необходимо войти в аккаунт!");
+                MainPageFrame.Navigate(new BookCatalog());
+
+            }
         }
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {

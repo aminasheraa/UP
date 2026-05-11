@@ -44,11 +44,7 @@ namespace UP.Pages
                 return;
             }
 
-            if (user.IsFrozen == true)
-            {
-                MessageBox.Show("Ваш аккаунт заморожен");
-                return;
-            }
+
 
             if (user.Role == null)
             {
