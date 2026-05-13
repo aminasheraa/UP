@@ -7,22 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UP
+namespace UP.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Complaint
+    public partial class sysdiagrams
     {
-        public int ID { get; set; }
-        public string Description { get; set; }
-        public Nullable<int> BookID { get; set; }
-        public Nullable<int> ReviewID { get; set; }
-        public int UserID { get; set; }
-        public string TargetType { get; set; }
-    
-        public virtual Book Book { get; set; }
-        public virtual Review Review { get; set; }
-        public virtual User User { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

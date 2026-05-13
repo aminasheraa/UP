@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UP.Models;
+
 
 namespace UP.Pages
 {
@@ -72,7 +74,7 @@ namespace UP.Pages
 
             MessageBox.Show("Успешная регистрация!");
 
-            NavigationService.Navigate(new MainPage());
+            NavigationService.Navigate(new BookCatalog());
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -81,7 +83,7 @@ namespace UP.Pages
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new MainPage());
+            NavigationService.Navigate(new BookCatalog());
         }
     }
 }

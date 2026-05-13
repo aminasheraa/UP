@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.Entity;
+using UP.Models;
+
 
 namespace UP.Pages
 {
@@ -24,50 +26,71 @@ namespace UP.Pages
         public ReadingListPage()
         {
             InitializeComponent();
-            SectionTabControl.SelectedIndex = 0;
+            if (SectionTabControl != null)
+                SectionTabControl.SelectedIndex = 0;
+        }
+
+        private void FilterChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateData();
         }
 
         private void UpdateData()
         {
-            if (Core.CurrentUser == null) return;
+            if (SearchTB == null || SectionTabControl == null || ReadingListBox == null)
+                return;
 
-            var books = Core.Context.ReadingList.Include("Book.User").Where(rl => rl.UserID == Core.CurrentUser.ID && !rl.Book.IsFrozen);
+            if (Core.CurrentUser == null || Core.Context == null) return;
 
-            if (SectionTabControl.SelectedItem is TabItem selectedTab)
+            var booksQuery = Core.Context.ReadingList
+                .Include("Book.User")
+                .Include("Book.GenreBook.Genre")
+                .Where(rl => rl.UserID == Core.CurrentUser.ID);
+
+            if (SectionTabControl.SelectedItem is TabItem selectedTab && selectedTab.Tag != null)
             {
-                int sectionId = int.Parse(selectedTab.Tag.ToString());
-                books = books.Where(rl => rl.SectionID == sectionId);
+                if (int.TryParse(selectedTab.Tag.ToString(), out int sectionId))
+                {
+                    booksQuery = booksQuery.Where(rl => rl.SectionID == sectionId);
+                }
             }
 
-            string search = SearchTB.Text.Trim().ToLower();
+            string search = SearchTB.Text?.Trim().ToLower() ?? "";
             if (!string.IsNullOrEmpty(search))
             {
-                books = books.Where(rl => rl.Book.Name.ToLower().Contains(search) || rl.Book.User.Name.ToLower().Contains(search));
+                booksQuery = booksQuery.Where(rl => rl.Book != null &&
+                    (rl.Book.Name.ToLower().Contains(search) ||
+                     (rl.Book.User != null && rl.Book.User.Name.ToLower().Contains(search))));
             }
 
-            if (SortGenreCB.SelectedItem != null)
+            if (SortGenreCB?.SelectedItem != null && SortGenreCB.SelectedIndex > 0)
             {
-                string selectedGenre = (SortGenreCB.SelectedItem as ComboBoxItem)?.Content.ToString();
-                books = books.Where(rl => rl.Book.GenreBook.Any(gb => gb.Genre.Name == selectedGenre));
+                string selectedGenre = (SortGenreCB.SelectedItem as ComboBoxItem)?.Content?.ToString();
+                if (!string.IsNullOrEmpty(selectedGenre))
+                {
+                    booksQuery = booksQuery.Where(rl => rl.Book.GenreBook.Any(gb => gb.Genre.Name == selectedGenre));
+                }
             }
 
-            var list = books.ToList();
+            var list = booksQuery.ToList();
 
-            if (NameAndRatingCB.SelectedIndex == 0)
+            if (NameAndRatingCB != null)
             {
-                list = list.OrderBy(rl => rl.Book.Name).ToList();
-            }
-            else if (NameAndRatingCB.SelectedIndex == 1)
-            {
-                list = list.OrderByDescending(rl => rl.Book.Name).ToList();
-            }
-            else if (NameAndRatingCB.SelectedIndex == 2)
-            {
-                list = list.OrderBy(rl => rl.Book.AverageRating).ToList();
-            }
-            else if (NameAndRatingCB.SelectedIndex == 3)
-            {
-                list = list.OrderByDescending(rl => rl.Book.AverageRating).ToList();
+                switch (NameAndRatingCB.SelectedIndex)
+                {
+                    case 0: 
+                        list = list.OrderBy(rl => rl.Book?.Name).ToList();
+                        break;
+                    case 1: 
+                        list = list.OrderByDescending(rl => rl.Book?.Name).ToList();
+                        break;
+                    case 2:
+                        list = list.OrderBy(rl => rl.Book?.AverageRating ?? 0).ToList();
+                        break;
+                    case 3: 
+                        list = list.OrderByDescending(rl => rl.Book?.AverageRating ?? 0).ToList();
+                        break;
+                }
             }
 
             ReadingListBox.ItemsSource = list;
@@ -78,16 +101,12 @@ namespace UP.Pages
             UpdateData();
         }
 
-        private void ApplyFilter_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateData();
-        }
-
         private void ResetFilter_Click(object sender, RoutedEventArgs e)
         {
             SearchTB.Text = "";
-            NameAndRatingCB.SelectedIndex = -1;
-            SortGenreCB.SelectedIndex = -1;
+            if (NameAndRatingCB != null) NameAndRatingCB.SelectedIndex = 0;
+            if (SortGenreCB != null) SortGenreCB.SelectedIndex = 0;
+
             UpdateData();
         }
 
@@ -98,7 +117,7 @@ namespace UP.Pages
 
         private void ReadingListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (ReadingListBox.SelectedItem is ReadingList selected)
+            if (ReadingListBox.SelectedItem is ReadingList selected && selected.Book != null)
             {
                 NavigationService.Navigate(new BookPage(selected.Book));
             }
@@ -106,42 +125,37 @@ namespace UP.Pages
 
         private void BtnMove_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
-            if (btn != null && btn.ContextMenu != null)
+            if (sender is Button btn && btn.ContextMenu != null)
             {
                 btn.ContextMenu.PlacementTarget = btn;
                 btn.ContextMenu.IsOpen = true;
             }
         }
+
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var menuItem = sender as MenuItem;
-            if (menuItem == null) return;
+            if (!(sender is MenuItem menuItem)) return;
 
-            var contextMenu = menuItem.Parent as ContextMenu;
-            var button = contextMenu?.PlacementTarget as Button;
+            var selectedRecord = menuItem.DataContext as ReadingList;
 
-            var selectedRecord = button?.DataContext as ReadingList;
-
-            if (selectedRecord != null)
+            if (selectedRecord != null && menuItem.Tag != null)
             {
                 try
                 {
-                    int selectedSectionId = int.Parse(menuItem.Tag.ToString());
-                    selectedRecord.SectionID = selectedSectionId;
+                    if (int.TryParse(menuItem.Tag.ToString(), out int selectedSectionId))
+                    {
+                        selectedRecord.SectionID = selectedSectionId;
+                        Core.Context.SaveChanges();
 
-                    Core.Context.SaveChanges();
-                    UpdateData();
-
-                    MessageBox.Show("Книга перемещена!");
+                        UpdateData();
+                        MessageBox.Show("Книга перемещена!");
+                    }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Ошибка сохранения: " + ex.Message);
                 }
             }
-
         }
-
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Хранилище UPModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище UPModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Book">
           <Key>
             <PropertyRef Name="ID" />
@@ -25,7 +25,7 @@
           <Property Name="Description" Type="nvarchar" MaxLength="550" Nullable="false" />
           <Property Name="BookID" Type="int" />
           <Property Name="ReviewID" Type="int" />
-          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" />
           <Property Name="TargetType" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Genre">
@@ -159,7 +159,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Complaint_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Complaint" Type="Self.Complaint" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -376,7 +376,8 @@
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="UPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -391,12 +392,12 @@
           <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="AuthorID" Type="Int32" Nullable="false" />
           <Property Name="IsFrozen" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Book_User" FromRole="Book" ToRole="User" />
           <NavigationProperty Name="Complaint" Relationship="Self.FK_Complaint_Book" FromRole="Book" ToRole="Complaint" />
           <NavigationProperty Name="GenreBook" Relationship="Self.FK_GenreBook_Book" FromRole="Book" ToRole="GenreBook" />
           <NavigationProperty Name="ReadingList" Relationship="Self.FK_ReadingList_Book" FromRole="Book" ToRole="ReadingList" />
           <NavigationProperty Name="Review" Relationship="Self.FK_Review_Book" FromRole="Book" ToRole="Review" />
           <NavigationProperty Name="UnfreezeApplication" Relationship="Self.FK_UnfreezeApplication_Book" FromRole="Book" ToRole="UnfreezeApplication" />
-          <NavigationProperty Name="User" Relationship="UPModel.FK_Book_User" FromRole="Book" ToRole="User" />
         </EntityType>
         <EntityType Name="Complaint">
           <Key>
@@ -406,7 +407,7 @@
           <Property Name="Description" Type="String" MaxLength="550" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="BookID" Type="Int32" />
           <Property Name="ReviewID" Type="Int32" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" />
           <Property Name="TargetType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Book" Relationship="Self.FK_Complaint_Book" FromRole="Complaint" ToRole="Book" />
           <NavigationProperty Name="Review" Relationship="Self.FK_Complaint_Review" FromRole="Complaint" ToRole="Review" />
@@ -453,10 +454,10 @@
           <Property Name="BookID" Type="Int32" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="IsFrozen" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Book" Relationship="Self.FK_Review_Book" FromRole="Review" ToRole="Book" />
           <NavigationProperty Name="Complaint" Relationship="Self.FK_Complaint_Review" FromRole="Review" ToRole="Complaint" />
           <NavigationProperty Name="User" Relationship="Self.FK_Review_User" FromRole="Review" ToRole="User" />
-          <Property Name="IsFrozen" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -519,14 +520,26 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IsFrozen" Type="Boolean" Nullable="false" />
           <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Book" Relationship="Self.FK_Book_User" FromRole="User" ToRole="Book" />
           <NavigationProperty Name="Complaint" Relationship="Self.FK_Complaint_User" FromRole="User" ToRole="Complaint" />
           <NavigationProperty Name="ReadingList" Relationship="Self.FK_ReadingList_User" FromRole="User" ToRole="ReadingList" />
           <NavigationProperty Name="Review" Relationship="Self.FK_Review_User" FromRole="User" ToRole="Review" />
           <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="RoleApplication" Relationship="Self.FK_RoleApplication_User" FromRole="User" ToRole="RoleApplication" />
           <NavigationProperty Name="UnfreezeApplication" Relationship="Self.FK_UnfreezeApplication_User" FromRole="User" ToRole="UnfreezeApplication" />
-          <NavigationProperty Name="Book" Relationship="UPModel.FK_Book_User" FromRole="User" ToRole="Book" />
         </EntityType>
+        <Association Name="FK_Book_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Book" Type="Self.Book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Book">
+              <PropertyRef Name="AuthorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Complaint_Book">
           <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
           <End Role="Complaint" Type="Self.Complaint" Multiplicity="*" />
@@ -600,7 +613,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Complaint_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Complaint" Type="Self.Complaint" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -708,6 +721,10 @@
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="UnfreezeApplication" EntityType="Self.UnfreezeApplication" />
           <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Book_User" Association="Self.FK_Book_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Book" EntitySet="Book" />
+          </AssociationSet>
           <AssociationSet Name="FK_Complaint_Book" Association="Self.FK_Complaint_Book">
             <End Role="Book" EntitySet="Book" />
             <End Role="Complaint" EntitySet="Complaint" />
@@ -764,23 +781,7 @@
             <End Role="User" EntitySet="User" />
             <End Role="UnfreezeApplication" EntitySet="UnfreezeApplication" />
           </AssociationSet>
-          <AssociationSet Name="FK_Book_User" Association="UPModel.FK_Book_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Book" EntitySet="Book" />
-          </AssociationSet>
         </EntityContainer>
-        <Association Name="FK_Book_User">
-          <End Type="UPModel.User" Role="User" Multiplicity="1" />
-          <End Type="UPModel.Book" Role="Book" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Book">
-              <PropertyRef Name="AuthorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -843,13 +844,13 @@
           <EntitySetMapping Name="Review">
             <EntityTypeMapping TypeName="UPModel.Review">
               <MappingFragment StoreEntitySet="Review">
-                <ScalarProperty Name="IsFrozen" ColumnName="IsFrozen" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
                 <ScalarProperty Name="BookID" ColumnName="BookID" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="IsFrozen" ColumnName="IsFrozen" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

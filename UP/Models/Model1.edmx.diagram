@@ -4,19 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b782825bec954f8a8434679769ac60eb" Name="Diagram1">
-        <EntityTypeShape EntityType="UPModel.Book" Width="1.5" PointX="3" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.Complaint" Width="1.5" PointX="5.25" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.Genre" Width="1.5" PointX="6" PointY="15.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.GenreBook" Width="1.5" PointX="8.25" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.ReadingList" Width="1.5" PointX="8.25" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.Review" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.Role" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.RoleApplication" Width="1.5" PointX="5.25" PointY="18.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.Section" Width="1.5" PointX="6" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.sysdiagrams" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.UnfreezeApplication" Width="1.5" PointX="5.25" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="UPModel.User" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
+      <Diagram DiagramId="191c2b9add5b4a67b381f177a3559160" Name="Diagram1">
+        <EntityTypeShape EntityType="UPModel.Book" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Complaint" Width="1.5" PointX="7.5" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Genre" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.GenreBook" Width="1.5" PointX="7.5" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.ReadingList" Width="1.5" PointX="10.5" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Review" Width="1.5" PointX="7.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Role" Width="1.5" PointX="0.75" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.RoleApplication" Width="1.5" PointX="5.25" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Section" Width="1.5" PointX="8.25" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.UnfreezeApplication" Width="1.5" PointX="10.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.User" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />
+        <AssociationConnector Association="UPModel.FK_Book_User" ManuallyRouted="false" />
         <AssociationConnector Association="UPModel.FK_Complaint_Book" ManuallyRouted="false" />
         <AssociationConnector Association="UPModel.FK_GenreBook_Book" ManuallyRouted="false" />
         <AssociationConnector Association="UPModel.FK_ReadingList_Book" ManuallyRouted="false" />
@@ -31,7 +32,6 @@
         <AssociationConnector Association="UPModel.FK_User_Role" ManuallyRouted="false" />
         <AssociationConnector Association="UPModel.FK_RoleApplication_User" ManuallyRouted="false" />
         <AssociationConnector Association="UPModel.FK_UnfreezeApplication_User" ManuallyRouted="false" />
-        <AssociationConnector Association="UPModel.FK_Book_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UP.Windows;
+using UP.Models;
+
 
 namespace UP.Pages
 {
@@ -24,9 +26,12 @@ namespace UP.Pages
         public AuthorPage()
         {
             InitializeComponent();
-            UpdateData();
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateData();
+        }
         private void UpdateData()
         {
             if (Core.CurrentUser == null) return;
@@ -70,8 +75,8 @@ namespace UP.Pages
 
             if (selectedBook != null)
             {
-                UnfreezeApplicationWindow UnfreezeApplicationWindow = new UnfreezeApplicationWindow();
-                UnfreezeApplicationWindow.ShowDialog();
+                var unfreezeWindow = new UnfreezeApplicationWindow(selectedBook.ID);
+                unfreezeWindow.ShowDialog();
 
                 UpdateData();
             }

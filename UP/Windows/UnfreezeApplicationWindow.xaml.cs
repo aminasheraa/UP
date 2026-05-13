@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UP.Models;
+
 
 namespace UP.Windows
 {
@@ -19,9 +21,11 @@ namespace UP.Windows
     /// </summary>
     public partial class UnfreezeApplicationWindow : Window
     {
-        public UnfreezeApplicationWindow()
+        private int? _selectedBookID;
+        public UnfreezeApplicationWindow(int? bookID = null)
         {
             InitializeComponent();
+            _selectedBookID = bookID;
         }
         private void SendBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -32,20 +36,26 @@ namespace UP.Windows
                 return;
             }
 
- 
             var newUnfreezeApplication = new UnfreezeApplication
             {
                 UserID = Core.CurrentUser.ID,
+                BookID = _selectedBookID,
                 Description = text,
                 Status = false,
                 CreatedAt = DateTime.Now
             };
 
-            Core.Context.UnfreezeApplication.Add(newUnfreezeApplication);
-            Core.Context.SaveChanges();
-
-            MessageBox.Show("Ваша заявка отправлена на рассмотрение!");
-            this.Close();
+            try
+            {
+                Core.Context.UnfreezeApplication.Add(newUnfreezeApplication);
+                Core.Context.SaveChanges();
+                MessageBox.Show("Ваша заявка отправлена на рассмотрение!");
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при отправке: " + ex.Message);
+            }
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)

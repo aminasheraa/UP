@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UP.Models;
+
 
 namespace UP.Windows
 {
@@ -49,7 +51,8 @@ namespace UP.Windows
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка: " + ex.Message);
+                var message = ex.InnerException?.InnerException?.Message ?? ex.Message;
+                MessageBox.Show("Ошибка сохранения: " + message);
             }
         }
 

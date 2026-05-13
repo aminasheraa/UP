@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UP
+namespace UP.Models
 {
     using System;
     using System.Data.Entity;

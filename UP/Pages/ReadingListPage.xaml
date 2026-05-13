@@ -15,28 +15,29 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBox x:Name="SearchTB" FontFamily="Book Antiqua" Width="150" Height="30" Margin="5" TextChanged="SearchTB_TextChanged"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <TextBox x:Name="SearchTB" FontFamily="Book Antiqua" Width="150" Margin="5" TextChanged="SearchTB_TextChanged"/>
 
-            <ComboBox x:Name="NameAndRatingCB" FontFamily="Book Antiqua" Width="150" Margin="5">
-                <ComboBoxItem Content="В алфавитном порядке" FontFamily="Book Antiqua"/>
-                <ComboBoxItem Content="Не в алфавитном порядке" FontFamily="Book Antiqua"/>
-                <ComboBoxItem Content="Рейтинг ↑" FontFamily="Book Antiqua"/>
-                <ComboBoxItem Content="Рейтинг ↓" FontFamily="Book Antiqua"/>
-            </ComboBox>
-            <ComboBox x:Name="SortGenreCB" FontFamily="Book Antiqua" Width="150" Margin="5">
-                <ComboBoxItem Content="Антиутопия" FontFamily="Book Antiqua"/>
-                <ComboBoxItem Content="Классика" FontFamily="Book Antiqua"/>
-                <ComboBoxItem Content="Роман" FontFamily="Book Antiqua"/>
-                <ComboBoxItem Content="Романтика" FontFamily="Book Antiqua"/>
-                <ComboBoxItem Content="Современная проза" FontFamily="Book Antiqua"/>
-                <ComboBoxItem Content="Хоррор" FontFamily="Book Antiqua"/>
+            <ComboBox x:Name="NameAndRatingCB" FontFamily="Book Antiqua" Width="170" Margin="5" SelectedIndex="0" SelectionChanged="FilterChanged">
+                <ComboBoxItem Content="В алфавитном порядке"/>
+                <ComboBoxItem Content="Не в алфавитном порядке"/>
+                <ComboBoxItem Content="Рейтинг ↑"/>
+                <ComboBoxItem Content="Рейтинг ↓"/>
             </ComboBox>
 
-            <Button Content="Применить" Width="90"  Margin="5" Click="ApplyFilter_Click" FontFamily="Book Antiqua"/>
+            <ComboBox x:Name="SortGenreCB" FontFamily="Book Antiqua" Width="150" Margin="5" SelectionChanged="FilterChanged" SelectedIndex="0">
+                <ComboBoxItem Content="Все жанры"/>
+                <ComboBoxItem Content="Антиутопия"/>
+                <ComboBoxItem Content="Классика"/>
+                <ComboBoxItem Content="Роман"/>
+                <ComboBoxItem Content="Романтика"/>
+                <ComboBoxItem Content="Современная проза"/>
+                <ComboBoxItem Content="Хоррор"/>
+            </ComboBox>
+
             <Button Content="✕" Width="30" Margin="5" Click="ResetFilter_Click" FontFamily="Book Antiqua"/>
         </StackPanel>
-
+        
         <TabControl Grid.Row="1" x:Name="SectionTabControl" SelectionChanged="SectionChanged">
             <TabItem Header="В планах" Tag="2" FontFamily="Book Antiqua"/>
             <TabItem Header="Читаю" Tag="3" FontFamily="Book Antiqua"/>
@@ -47,21 +48,19 @@
         <ListBox Grid.Row="2" x:Name="ReadingListBox" MouseDoubleClick="ReadingListBox_MouseDoubleClick" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Width="150" Margin="10">
+                    <StackPanel Width="150" Margin="10" Background="Transparent">
                         <Image Source="{Binding Book.ImagePath}" Height="240" Stretch="UniformToFill"/>
                         <TextBlock Text="{Binding Book.Name}" FontSize="14" FontWeight="Bold" TextAlignment="Center" FontFamily="Book Antiqua" TextWrapping="Wrap"/>
                         <TextBlock Text="{Binding Book.User.Name}" FontSize="12" TextAlignment="Center" FontFamily="Book Antiqua"/>
 
-                        <Button Content="Переместить" FontFamily="Book Antiqua" FontSize="10" Margin="0,5,0,5" Click="BtnMove_Click">
-                            <Button.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="В планах" Click="MenuItem_Click" Tag="2"/>
-                                    <MenuItem Header="Читаю" Click="MenuItem_Click" Tag="3"/>
-                                    <MenuItem Header="Прочитано" Click="MenuItem_Click" Tag="4"/>
-                                    <MenuItem Header="Заброшено" Click="MenuItem_Click" Tag="1"/>
-                                </ContextMenu>
-                            </Button.ContextMenu>
-                        </Button>
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="В планах" Click="MenuItem_Click" Tag="2"/>
+                                <MenuItem Header="Читаю" Click="MenuItem_Click" Tag="3"/>
+                                <MenuItem Header="Прочитано" Click="MenuItem_Click" Tag="4"/>
+                                <MenuItem Header="Заброшено" Click="MenuItem_Click" Tag="1"/>
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

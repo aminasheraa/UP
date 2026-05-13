@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:UP.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AuthorPage" Background="White">
+      Title="AuthorPage" Background="White" Loaded="Page_Loaded">
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>

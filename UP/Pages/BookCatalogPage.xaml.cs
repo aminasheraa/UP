@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UP.Models;
+
 
 namespace UP.Pages
 {
@@ -25,66 +27,67 @@ namespace UP.Pages
         public BookCatalog()
         {
             InitializeComponent();
-            LoadBooks();
-        }
-        private void LoadBooks()
-        {
-             BookListBox.ItemsSource = Core.Context.Book.Include("User").Include("Review").Where(b => b.IsFrozen == false).ToList();
-
         }
 
-        private void SearchTB_TextChanged(object sender, TextChangedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            UpdateFilters();
+        }
+
+        private void UpdateFilters()
+        {
+            if (BookListBox == null) return; 
+            var filtered = Core.Context.Book.Include("User").Include("Review").Where(b => b.IsFrozen == false).ToList();
+
             string search = SearchTB.Text.Trim().ToLower();
-
-            if (string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(search))
             {
-                LoadBooks();
-                return;
+                filtered = filtered.Where(f => f.Name.ToLower().Contains(search) || f.User.Name.ToLower().Contains(search)).ToList();
             }
 
-            var searchedBook = Core.Context.Book.Where(b => b.IsFrozen == false).Where(f => f.Name.ToLower().Contains(search) || f.User.Name.ToLower().Contains(search)).ToList();
-
-            BookListBox.ItemsSource = searchedBook;
-        }
-
-        private void ApplyFilter_Click(object sender, RoutedEventArgs e)
-        {
-
-            var filtered = Core.Context.Book.Where(b => b.IsFrozen == false).ToList();
-
-            if (SortGenreCB.SelectedItem != null)
+            if (SortGenreCB.SelectedIndex > 0) 
             {
                 string selectedGenre = (SortGenreCB.SelectedItem as ComboBoxItem)?.Content.ToString();
-
                 filtered = filtered.Where(b => b.GenreBook.Any(gb => gb.Genre.Name == selectedGenre)).ToList();
             }
 
-            if (NameAndRatingCB.SelectedIndex == 0)
-                filtered = filtered.OrderBy(p => p.Name).ToList();
-
-            if (NameAndRatingCB.SelectedIndex == 1)
-                filtered = filtered.OrderByDescending(p => p.Name).ToList();
-
-
-
-            if (NameAndRatingCB.SelectedIndex == 2)
-                filtered = filtered.OrderBy(p => p.AverageRating).ToList();
-
-            if (NameAndRatingCB.SelectedIndex == 3)
-                filtered = filtered.OrderByDescending(p => p.AverageRating).ToList();
-
+            switch (NameAndRatingCB.SelectedIndex)
+            {
+                case 0: 
+                    filtered = filtered.OrderBy(p => p.Name).ToList();
+                    break;
+                case 1: 
+                    filtered = filtered.OrderByDescending(p => p.Name).ToList();
+                    break;
+                case 2: 
+                    filtered = filtered.OrderBy(p => p.AverageRating).ToList();
+                    break;
+                case 3: 
+                    filtered = filtered.OrderByDescending(p => p.AverageRating).ToList();
+                    break;
+            }
 
             BookListBox.ItemsSource = filtered;
         }
 
+        private void SearchTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateFilters();
+        }
+
+        private void FilterChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateFilters();
+        }
+
         private void ResetFilter_Click(object sender, RoutedEventArgs e)
         {
-            NameAndRatingCB.SelectedIndex = -1;
-            SortGenreCB.SelectedIndex = -1;
-
-            LoadBooks();
+            SearchTB.Text = "";
+            NameAndRatingCB.SelectedIndex = 0;  
+            SortGenreCB.SelectedIndex = 0;
+            UpdateFilters();
         }
+
 
         private void BookListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -92,8 +95,64 @@ namespace UP.Pages
             {
                 NavigationService.Navigate(new BookPage(selectedBook));
             }
-        }
 
+        }
+        private bool IsUserNotNullAndNotFrozen()
+        {
+            if (Core.CurrentUser == null)
+            {
+                MessageBox.Show("Необходимо войти в аккаунт!", "Авторизация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return false;
+            }
+            if (Core.CurrentUser.IsFrozen)
+            {
+                MessageBox.Show("Ваш аккаунт заморожен!", "Заморозка", MessageBoxButton.OK, MessageBoxImage.Information);
+                return false;
+
+            }
+            return true;
+        }
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsUserNotNullAndNotFrozen())
+                return;
+
+            var menuItem = sender as MenuItem;
+            var selectedBook = menuItem.DataContext as Book;
+
+            if (selectedBook == null) return;
+
+            int sectionId = int.Parse(menuItem.Tag.ToString());
+
+            try
+            {
+                var existingRecord = Core.Context.ReadingList
+                    .FirstOrDefault(rl => rl.UserID == Core.CurrentUser.ID && rl.BookID == selectedBook.ID);
+
+                if (existingRecord == null)
+                {
+                    ReadingList newListEntry = new ReadingList
+                    {
+                        UserID = Core.CurrentUser.ID,
+                        BookID = selectedBook.ID,
+                        SectionID = sectionId
+                    };
+                    Core.Context.ReadingList.Add(newListEntry);
+                    MessageBox.Show($"Книга '{selectedBook.Name}' добавлена в список!");
+                }
+                else
+                {
+                    existingRecord.SectionID = sectionId;
+                    MessageBox.Show($"Статус книги '{selectedBook.Name}' обновлен.");
+                }
+
+                Core.Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при добавлении: " + ex.Message);
+            }
+        }
 
     }
 }

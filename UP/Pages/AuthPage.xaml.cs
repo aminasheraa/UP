@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UP.Models;
+
 
 namespace UP.Pages
 {
@@ -29,7 +31,7 @@ namespace UP.Pages
         {
 
             string login = LoginTB.Text;
-            string password = PasswordTB.Text;
+            string password = PasswordTB.Password;
 
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
@@ -54,7 +56,7 @@ namespace UP.Pages
 
             Core.CurrentUser = user;
 
-            NavigationService.GoBack();
+            NavigationService.Navigate(new BookCatalog());
 
 
 

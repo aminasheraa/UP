@@ -7,20 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UP
+namespace UP.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ReadingList
+    public partial class RoleApplication
     {
         public int ID { get; set; }
         public int UserID { get; set; }
-        public int BookID { get; set; }
-        public int SectionID { get; set; }
+        public string Description { get; set; }
+        public bool Status { get; set; }
+        public System.DateTime CreatedAt { get; set; }
     
-        public virtual Book Book { get; set; }
-        public virtual Section Section { get; set; }
         public virtual User User { get; set; }
     }
 }

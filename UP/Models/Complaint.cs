@@ -7,24 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UP
+namespace UP.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Genre
+    public partial class Complaint
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Genre()
-        {
-            this.GenreBook = new HashSet<GenreBook>();
-        }
-    
         public int ID { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
+        public Nullable<int> BookID { get; set; }
+        public Nullable<int> ReviewID { get; set; }
+        public Nullable<int> UserID { get; set; }
+        public string TargetType { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GenreBook> GenreBook { get; set; }
+        public virtual Book Book { get; set; }
+        public virtual Review Review { get; set; }
+        public virtual User User { get; set; }
     }
 }

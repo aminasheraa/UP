@@ -17,7 +17,7 @@
                 <TextBox x:Name="NameTB" Height="30" FontFamily="Book Antiqua" Margin="0,0,0,15" VerticalContentAlignment="Center"/>
 
                 <TextBlock Text="Краткое описание (аннотация)" Margin="0,0,0,5" FontFamily="Book Antiqua" FontWeight="SemiBold"/>
-                <TextBox x:Name="DescriptionTB" Height="80" FontFamily="Book Antiqua" Margin="0,0,0,15" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                <TextBox x:Name="DescriptionTB" Height="50" FontFamily="Book Antiqua" Margin="0,0,0,15" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
 
                 <TextBlock Text="Жанры" Margin="0,0,0,5" FontFamily="Book Antiqua" FontWeight="SemiBold"/>
                 <ListBox x:Name="GenresListBox" Height="120" FontFamily="Book Antiqua" Margin="0,0,0,15" SelectionMode="Multiple" DisplayMemberPath="Name"/>
@@ -31,7 +31,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="ImagePathTB" FontFamily="Book Antiqua" Height="30" VerticalContentAlignment="Center" IsReadOnly="True" Background="#F9F9F9"/>
+                    <TextBox x:Name="ImagePathTB" FontFamily="Book Antiqua" Height="30" VerticalContentAlignment="Center" Background="#F9F9F9"/>
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">

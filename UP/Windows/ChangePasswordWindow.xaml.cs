@@ -10,30 +10,31 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UP.Models;
 
 
-namespace UP.Pages
+namespace UP.Windows
 {
     /// <summary>
-    /// Логика взаимодействия для ReadPage.xaml
+    /// Логика взаимодействия для ChangePasswordWindow.xaml
     /// </summary>
-    public partial class ReadPage : Page
+    public partial class ChangePasswordWindow : Window
     {
-        private Book _currentBook;
+        public string NewPassword { get; private set; }
 
-        public ReadPage(Book selectedBook)
+        public ChangePasswordWindow()
         {
             InitializeComponent();
-            _currentBook = selectedBook;
-            this.DataContext = _currentBook;
         }
 
-        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.GoBack();
+            if (!string.IsNullOrWhiteSpace(PasswordTB.Text))
+            {
+                NewPassword = PasswordTB.Text;
+                DialogResult = true;
+            }
         }
     }
 }

@@ -7,23 +7,30 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UP
+namespace UP.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Role
+    public partial class Review
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Role()
+        public Review()
         {
-            this.User = new HashSet<User>();
+            this.Complaint = new HashSet<Complaint>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
+        public double Rating { get; set; }
+        public string Text { get; set; }
+        public int BookID { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public int UserID { get; set; }
+        public bool IsFrozen { get; set; }
     
+        public virtual Book Book { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> User { get; set; }
+        public virtual ICollection<Complaint> Complaint { get; set; }
+        public virtual User User { get; set; }
     }
 }

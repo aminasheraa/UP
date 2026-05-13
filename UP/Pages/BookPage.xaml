@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:UP.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="BookPage" Background="White">
+      Title="BookPage" Background="White" Loaded="Page_Loaded">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="10">
@@ -19,7 +19,7 @@
                 <Image Height="280" Stretch="UniformToFill" Source="{Binding ImagePath}"/>
                 <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" FontFamily="Book Antiqua" TextWrapping="Wrap" Margin="0,8,0,4"/>
                 <TextBlock Text="{Binding User.Name, StringFormat=Автор: {0}}" FontSize="13" FontFamily="Book Antiqua" Margin="0,1"/>
-                <TextBlock Text="{Binding GenresText, StringFormat=Жанры: {0}}" FontSize="13" FontFamily="Book Antiqua" TextWrapping="Wrap" Margin="0,1"/>
+                <TextBlock Text="{Binding GenresText}" FontSize="13" FontFamily="Book Antiqua" TextWrapping="Wrap" Margin="0,1"/>
                 <TextBlock Text="{Binding AverageRating, StringFormat=Рейтинг: {0:F1}}" FontSize="13" FontFamily="Book Antiqua" FontWeight="Bold" Margin="0,1,0,10"/>
                 <Button Content="Читать" FontFamily="Book Antiqua" Height="25" Margin="0,2" FontSize="12" Click="BtnRead_Click"/>
                 <Button Content="В список" FontFamily="Book Antiqua" Height="25" Margin="0,2" FontSize="12">

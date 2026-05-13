@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UP.Windows"
         mc:Ignorable="d"
-        Title="UnfreezeApplicationWindow" Height="300" Width="800">
+        Title="Заявка на заморозку" Height="300" Width="800">
     <Grid Margin="20">
         <StackPanel>
             <TextBlock Text="Оспорить заморозку" FontSize="18" FontWeight="Bold" FontFamily="Book Antiqua" Margin="0,0,0,10"/>

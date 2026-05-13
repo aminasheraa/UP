@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UP.Models;
 
 namespace UP.Pages
 {
@@ -22,69 +23,77 @@ namespace UP.Pages
     public partial class BookPage : Page
     {
         private Book _currentBook;
-
         public ObservableCollection<Review> BookReviews { get; set; }
 
         public BookPage(Book selectedBook)
         {
             InitializeComponent();
             _currentBook = selectedBook;
-            this.DataContext = _currentBook;
-            LoadReviews();
 
+            BookReviews = new ObservableCollection<Review>();
+            ReviewListBox.ItemsSource = BookReviews;
 
             if (Core.CurrentUser != null && Core.CurrentUser.RoleID == 3)
             {
                 AdminPanel.Visibility = Visibility.Visible;
-           }
+            }
         }
-        private void FreezeBtn_Loaded(object sender, RoutedEventArgs e)
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
-
-            if (Core.CurrentUser != null && Core.CurrentUser.RoleID == 3)
-            {
-                btn.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                btn.Visibility = Visibility.Collapsed;
-            }
+            UpdateData();
         }
 
-        private void LoadReviews()
+        private void UpdateData()
         {
-            if (_currentBook.Review != null)
+            try
             {
-                var reviews = _currentBook.Review.Where(r => r.IsFrozen == false).OrderByDescending(r => r.CreatedAt);
-                BookReviews = new ObservableCollection<Review>(reviews);
-                ReviewListBox.ItemsSource = BookReviews;
+                Core.Context.Entry(_currentBook).Reload();
+                Core.Context.Entry(_currentBook).Collection(b => b.Review).Load();
+
+                var reviews = _currentBook.Review
+                    .Where(r => r.IsFrozen == false)
+                    .OrderByDescending(r => r.CreatedAt)
+                    .ToList();
+
+                BookReviews.Clear();
+                foreach (var review in reviews)
+                {
+                    Core.Context.Entry(review).Reference(r => r.User).Load();
+                    BookReviews.Add(review);
+                }
+
+                this.DataContext = null;
+                this.DataContext = _currentBook;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при обновлении данных: " + ex.Message);
             }
         }
 
-        private bool IsUserNotNull()
+
+        private bool IsUserNotNullAndNotFrozen()
         {
             if (Core.CurrentUser == null)
             {
                 MessageBox.Show("Необходимо войти в аккаунт!", "Авторизация", MessageBoxButton.OK, MessageBoxImage.Information);
                 return false;
             }
-            return true;
-        }
-
-        private void BtnBack_Click(object sender, RoutedEventArgs e)
-        {
-            if (NavigationService.CanGoBack)
+            if (Core.CurrentUser.IsFrozen)
             {
-                NavigationService.GoBack();
+                MessageBox.Show("Ваш аккаунт заморожен!", "Заморозка", MessageBoxButton.OK, MessageBoxImage.Information);
+                return false;
             }
+            return true;
         }
 
         private void BtnSendReview_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsUserNotNull()) return; 
-            string reviewText = NewReviewText.Text; 
-            var selectedRating = NewReviewRating.SelectedItem as ComboBoxItem; 
+            if (!IsUserNotNullAndNotFrozen()) return;
+
+            string reviewText = NewReviewText.Text;
+            var selectedRating = NewReviewRating.SelectedItem as ComboBoxItem;
 
             if (string.IsNullOrWhiteSpace(reviewText) || selectedRating == null)
             {
@@ -107,7 +116,7 @@ namespace UP.Pages
                 Core.Context.Review.Add(newReview);
                 Core.Context.SaveChanges();
 
-                BookReviews.Insert(0, newReview);
+                UpdateData();
 
                 NewReviewText.Text = "";
                 NewReviewRating.SelectedIndex = -1;
@@ -120,16 +129,20 @@ namespace UP.Pages
             }
         }
 
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (NavigationService.CanGoBack) NavigationService.GoBack();
+        }
+
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsUserNotNull()) return;
-
+            if (!IsUserNotNullAndNotFrozen()) return;
             NavigationService.Navigate(new ReadPage(_currentBook));
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsUserNotNull()) return;
+            if (!IsUserNotNullAndNotFrozen()) return;
 
             var menuItem = sender as MenuItem;
             if (menuItem == null) return;
@@ -167,18 +180,18 @@ namespace UP.Pages
 
         private void BtnComplaint_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsUserNotNull()) return;
+            if (!IsUserNotNullAndNotFrozen()) return;
 
             var button = sender as Button;
-            string target = button.Tag.ToString(); 
+            string target = button?.Tag?.ToString();
+            if (string.IsNullOrEmpty(target)) return;
 
-            var complaint = new Complaint
-            {
-                UserID = Core.CurrentUser.ID,
-                BookID = _currentBook.ID,
-                TargetType = target
-            };
+            var complaint = new Complaint { TargetType = target };
 
+            if (target == "Книга")
+                complaint.BookID = _currentBook.ID;
+            else if (target == "Автор")
+                complaint.UserID = _currentBook.AuthorID;
 
             var win = new Windows.ComplaintWindow(complaint);
             win.Owner = Window.GetWindow(this);
@@ -187,16 +200,14 @@ namespace UP.Pages
 
         private void BtnComplaintReview_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsUserNotNull()) return;
+            if (!IsUserNotNullAndNotFrozen()) return;
 
             var button = sender as Button;
-            var selectedReview = button.DataContext as Review;
+            var selectedReview = button?.DataContext as Review;
             if (selectedReview == null) return;
 
             var complaint = new Complaint
             {
-                UserID = Core.CurrentUser.ID,
-                BookID = _currentBook.ID,
                 ReviewID = selectedReview.ID,
                 TargetType = "Отзыв"
             };
@@ -205,63 +216,34 @@ namespace UP.Pages
             win.Owner = Window.GetWindow(this);
             win.ShowDialog();
         }
+
         private void BtnFreezeBook_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show($"Заморозить книгу '{_currentBook.Name}'?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
+            if (MessageBox.Show($"Заморозить книгу '{_currentBook.Name}'?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                try
-                {
-                    var bookToFreeze = Core.Context.Book.FirstOrDefault(b => b.ID == _currentBook.ID);
-
-                    if (bookToFreeze != null)
-                    {
-                        bookToFreeze.IsFrozen = true; 
-
-                        Core.Context.SaveChanges();
-                        MessageBox.Show("Книга заморожена и больше не будет видна в общем каталоге.");
-                        NavigationService.GoBack();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка при заморозке книги: " + ex.Message);
-                }
+                _currentBook.IsFrozen = true;
+                Core.Context.SaveChanges();
+                NavigationService.GoBack();
             }
         }
+
         private void BtnFreezeReview_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var selectedReview = button.DataContext as Review;
-
+            var selectedReview = (sender as Button)?.DataContext as Review;
             if (selectedReview == null) return;
 
-            var result = MessageBox.Show("Заморозить этот отзыв?", "Администрирование", MessageBoxButton.YesNo);
-
-            if (result == MessageBoxResult.Yes)
+            if (MessageBox.Show("Заморозить этот отзыв?", "Админ", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                try
-                {
-                    var review = Core.Context.Review.FirstOrDefault(r => r.ID == selectedReview.ID);
-
-                    if (review != null)
-                    {
-                        review.IsFrozen = true;
-                        Core.Context.SaveChanges();
-
-                        BookReviews.Remove(selectedReview);
-
-                        MessageBox.Show("Отзыв успешно обработан.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка: " + ex.Message);
-                }
+                selectedReview.IsFrozen = true;
+                Core.Context.SaveChanges();
+                UpdateData();
             }
         }
 
-
+        private void FreezeBtn_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn)
+                btn.Visibility = (Core.CurrentUser?.RoleID == 3) ? Visibility.Visible : Visibility.Collapsed;
+        }
     }
 }

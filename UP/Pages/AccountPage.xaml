@@ -43,7 +43,6 @@
             <Border x:Name="FrozenPanel" Visibility="Collapsed" Background="White" BorderBrush="#A9A9A9" BorderThickness="1" CornerRadius="5" Margin="0,20,0,0" Padding="10">
                 <StackPanel>
                     <TextBlock Text="⚠ Аккаунт заморожен" FontWeight="Bold" Margin="0,0,0,5" FontFamily="Book Antiqua"/>
-                    <TextBlock x:Name="FreezeReasonTxt" Text="Причина не указана" TextWrapping="Wrap" FontSize="12" Margin="0,0,0,10" FontFamily="Book Antiqua"/>
                     <Button Content="Оспорить заморозку" Click="AppealBtn_Click" FontSize="11" Height="25" FontFamily="Book Antiqua"/>
                 </StackPanel>
             </Border>
